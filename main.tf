@@ -67,12 +67,10 @@ resource "google_compute_autoscaler" "default" {
     max_replicas    = var.max_replicas
     min_replicas    = var.min_replicas
     cooldown_period = var.cooldown_period
+    cpu_utilization {
+      target = 0.7
+    }
 
-    metric {
-      name                       = var.metric_name
-      filter                     = var.metric_filter
-      single_instance_assignment = var.single_instance_assignment
-      }
   }
 }
 

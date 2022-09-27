@@ -92,15 +92,3 @@ variable "cooldown_period" {
     description = "The cooldown period for the autoscaler"
     type        =  number
 }
-variable "metric_name" {
-    description = "The metric name for the autoscaler"
-    type        =  string
-}
-variable "metric_filter" {
-    description = "The metric filter for the autoscaler"
-    type        =  string
-}
-variable "single_instance_assignment" {
-    description = "single_instance_assignment for the autoscaler"
-    type        =  number
-}
