@@ -1,3 +1,30 @@
+resource "google_compute_health_check" "health-check" {
+  name    = var.name
+  project = var.project_id
+  dynamic "http_health_check" {
+    for_each = var.enable_http_health_check ? [{}] : []
+    content {
+      host         = var.host
+      request_path = var.request_path
+    }
+    }
+  dynamic "https_health_check" {
+    for_each = var.enable_https_health_check ? [{}] : []
+    content {
+      host         = var.host
+      request_path = var.request_path
+    }  
+  }
+  dynamic "tcp_health_check" {
+    for_each = var.enable_tcp_health_check ? [{}] : []
+    content {
+      #host         = var.host
+      #request_path = var.request_path
+      port = 443
+    }  
+  }
+}
+
 resource "google_compute_instance_template" "instance_template" {
   project        = var.project_id
   name_prefix    = var.instance_template_name_prefix
@@ -53,7 +80,11 @@ resource "google_compute_instance_group_manager" "instance_group_manager" {
   }
   base_instance_name = var.base_instance_name
   zone               = var.zone
-  target_size        = var.target_size
+  #target_size        = var.target_size
+  auto_healing_policies {
+    health_check      = google_compute_health_check.health-check.id
+    initial_delay_sec = 300
+  }
 
 }
 resource "google_compute_autoscaler" "default" {
@@ -68,11 +99,12 @@ resource "google_compute_autoscaler" "default" {
     min_replicas    = var.min_replicas
     cooldown_period = var.cooldown_period
 
-    metric {
+    /*metric {
       name                       = var.metric_name
       filter                     = var.metric_filter
       single_instance_assignment = var.single_instance_assignment
       }
+      */
   }
 }
 
