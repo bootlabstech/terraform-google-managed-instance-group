@@ -6,6 +6,7 @@ resource "google_compute_health_check" "health-check" {
     content {
       host         = var.host
       request_path = var.request_path
+      port=var.port
     }
     }
   dynamic "https_health_check" {
@@ -13,6 +14,7 @@ resource "google_compute_health_check" "health-check" {
     content {
       host         = var.host
       request_path = var.request_path
+      port=var.port 
     }  
   }
   dynamic "tcp_health_check" {
@@ -20,10 +22,11 @@ resource "google_compute_health_check" "health-check" {
     content {
       #host         = var.host
       #request_path = var.request_path
-      port = 443
+      port = var.port 
     }  
   }
 }
+
 
 resource "google_compute_instance_template" "instance_template" {
   project        = var.project_id
