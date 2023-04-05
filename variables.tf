@@ -156,3 +156,9 @@ variable "template_source_image" {
     type        =  string
     default = "projects/ubuntu-os-cloud/global/images/ubuntu-1804-bionic-arm64-v20230324"
 }
+variable "port" {
+  type=number 
+  description = "this is the port number where health check running"
+  #default = 443
+  
+}
